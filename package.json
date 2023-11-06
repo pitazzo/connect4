@@ -5,7 +5,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "start:dev": "npx nodemon",
+    "start": "ts-node --esm src/main.ts",
     "build": "tsc"
   },
   "keywords": [],
