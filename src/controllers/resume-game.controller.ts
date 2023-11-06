@@ -1,11 +1,8 @@
-import { Game } from "../models/game.js";
-import { ViewFactory } from "../views/view.factory.js";
 import { Controller } from "./controller.js";
-import { Logic } from "./logic.js";
 
 export class ResumeController extends Controller {
   async control(): Promise<void> {
-    const wantsAnotherGame = this.viewFactory
+    const wantsAnotherGame = await this.viewFactory
       .createQuestionsView()
       .askYesNoQuestion("¿Quieres jugar otra partida?");
 
