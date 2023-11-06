@@ -3,8 +3,7 @@ import { Board } from "../board.js";
 import { Color } from "../enums/colors.enum.js";
 import { Token } from "../token.js";
 import { ColumnId } from "../value-objects/column-id.js";
-import { PlayerVisitor } from "../../views/player-visitor.js";
-import { PlayController } from "../../controllers/play.controller.js";
+import { PlayerVisitor } from "../../controllers/players/player-visitor.js";
 
 export abstract class Player {
   private readonly tokens: Token[];
@@ -22,8 +21,5 @@ export abstract class Player {
     board.placeTokenAt(columnId, token);
   }
   abstract getType(): "human" | "machine";
-  abstract accept(
-    playerVisitor: PlayerVisitor,
-    controller: PlayController
-  ): Promise<void>;
+  abstract accept(playerVisitor: PlayerVisitor): Promise<void>;
 }

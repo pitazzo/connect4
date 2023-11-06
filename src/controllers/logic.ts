@@ -1,4 +1,5 @@
 import { Game } from "../models/game.js";
+import { ViewFactory } from "../views/view.factory.js";
 import { Controller } from "./controller.js";
 import { PlayController } from "./play.controller.js";
 import { ResumeController } from "./resume-game.controller.js";
@@ -13,13 +14,13 @@ export class Logic {
   currentState: StateValue;
   controllers: Map<StateValue, Controller>;
 
-  constructor() {
+  constructor(viewFactory: ViewFactory) {
     this.game = new Game();
     this.currentState = "INITIAL";
     this.controllers = new Map<StateValue, Controller>([
-      ["INITIAL", new StartGameController(this.game, this)],
-      ["IN_GAME", new PlayController(this.game, this)],
-      ["RESUME", new ResumeController(this.game, this)],
+      ["INITIAL", new StartGameController(this, this.game, viewFactory)],
+      ["IN_GAME", new PlayController(this, this.game, viewFactory)],
+      ["RESUME", new ResumeController(this, this.game, viewFactory)],
     ]);
   }
 

@@ -1,13 +1,13 @@
 import { Game } from "../models/game.js";
-import { ControllerVisitor } from "./controller-visitor.interface.js";
+import { ViewFactory } from "../views/view.factory.js";
 import { Logic } from "./logic.js";
 
 export abstract class Controller {
-  constructor(protected readonly game: Game, protected readonly logic: Logic) {}
+  constructor(
+    protected readonly logic: Logic,
+    protected readonly game: Game,
+    protected readonly viewFactory: ViewFactory
+  ) {}
 
-  abstract accept(controllerVisitor: ControllerVisitor): Promise<void>;
-
-  complete(): void {
-    this.logic.next();
-  }
+  abstract control(): Promise<void>;
 }

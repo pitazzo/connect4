@@ -1,46 +1,37 @@
 import { Controller } from "./controller.js";
-import { ControllerVisitor } from "./controller-visitor.interface.js";
-import { Coordinate } from "../models/value-objects/coordinate.js";
-import { Token } from "../models/token.js";
-import { BoardSize } from "../models/value-objects/board-size.js";
-import { ColumnId } from "../models/value-objects/column-id.js";
 import { Player } from "../models/players/player.js";
+import { PlayerVisitor } from "./players/player-visitor.js";
+import { MachinePlayerController } from "./players/machine-player.controller.js";
+import { HumanPlayerController } from "./players/human-player.controller.js";
 
-export class PlayController extends Controller {
-  async accept(controllerVisitor: ControllerVisitor): Promise<void> {
-    await controllerVisitor.visitPlayController(this);
-  }
-
-  getCurrentPlayer(): Player {
-    return this.game.getCurrentPlayer();
-  }
-
-  advanceTurn(): void {
+export class PlayController extends Controller implements PlayerVisitor {
+  async control(): Promise<void> {
     this.game.advanceTurn();
+    await this.game.getCurrentPlayer().accept(this);
+    this.viewFactory.createBoardView().draw(this.game.board);
+    if (this.getWinner() !== undefined) {
+      this.viewFactory.createMessagesView().announceWinner(this.getWinner());
+      this.logic.next();
+    }
   }
 
-  placeTokenFromCurrentPlayerAt(columnId: ColumnId): void {
-    this.game.getCurrentPlayer().placeTokenAt(columnId, this.game.board);
+  async visitMachinePlayer(): Promise<void> {
+    await new MachinePlayerController(
+      this.logic,
+      this.game,
+      this.viewFactory
+    ).control();
+  }
+  async visitHumanPlayer(): Promise<void> {
+    await new HumanPlayerController(
+      this.logic,
+      this.game,
+      this.viewFactory
+    ).control();
   }
 
-  getBoardSize(): BoardSize {
-    return this.game.board.boardSize;
-  }
-
-  isColumnFull(columnId: ColumnId): boolean {
-    return this.game.board.isColumnFull(columnId);
-  }
-
-  getAvailableColumns(): ColumnId[] {
-    return this.game.board.getAvailableColumns();
-  }
-
-  getTokenAtCoordinate(coordinate: Coordinate): Token | null {
-    return this.game.board.getTokenAt(coordinate);
-  }
-
-  getWinner(): Player | undefined | null {
-    const currentPlayer = this.getCurrentPlayer();
+  private getWinner(): Player | undefined | null {
+    const currentPlayer = this.game.getCurrentPlayer();
     if (!currentPlayer.hasTokens()) {
       return null;
     }

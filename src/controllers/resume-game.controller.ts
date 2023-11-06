@@ -1,13 +1,22 @@
+import { Game } from "../models/game.js";
+import { ViewFactory } from "../views/view.factory.js";
 import { Controller } from "./controller.js";
-import { ControllerVisitor } from "./controller-visitor.interface.js";
+import { Logic } from "./logic.js";
 
 export class ResumeController extends Controller {
-  async accept(controllerVisitor: ControllerVisitor): Promise<void> {
-    await controllerVisitor.visitResumeController(this);
-  }
+  async control(): Promise<void> {
+    const wantsAnotherGame = this.viewFactory
+      .createQuestionsView()
+      .askYesNoQuestion("¿Quieres jugar otra partida?");
 
+    if (wantsAnotherGame) {
+      this.resetGame();
+      return;
+    }
+    this.logic.next();
+  }
   resetGame(): void {
-    this.logic.currentState = "INITIAL";
     this.game.reset();
+    this.logic.currentState = "INITIAL";
   }
 }

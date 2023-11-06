@@ -2,8 +2,9 @@ import chalk from "chalk";
 import { PlayerSummary } from "../../../controllers/start-game.controller.js";
 import { Player } from "../../../models/players/player.js";
 import { ColumnId } from "../../../models/value-objects/column-id.js";
+import { MessagesView } from "../../interfaces/helpers/messages-view.interfaces.js";
 
-export class MessagesView {
+export class ConsoleMessagesView implements MessagesView {
   welcome(): void {
     console.log(`¡Bienvenido a ${chalk.blue("Conecta")}${chalk.red("4")}!`);
   }

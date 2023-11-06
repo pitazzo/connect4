@@ -1,8 +1,9 @@
 import inquirer from "inquirer";
 import { ColumnId } from "../../../models/value-objects/column-id.js";
 import { Player } from "../../../models/players/player.js";
+import { QuestionsView } from "../../interfaces/helpers/questions-view.interface.js";
 
-export class QuestionsView {
+export class ConsoleQuestionsView implements QuestionsView {
   async askForNumberInRange(
     min: number,
     max: number,

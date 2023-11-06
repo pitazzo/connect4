@@ -1,10 +1,10 @@
 import { Connect4 } from "./connect4.js";
-import { ControllerVisitor } from "./controllers/controller-visitor.interface.js";
-import { ConsoleView } from "./views/console.view.js";
+import { ConsoleViewFactory } from "./views/console-view.factory.js";
+import { ViewFactory } from "./views/view.factory.js";
 
 export class ConsoleConnect4 extends Connect4 {
-  protected createView(): ControllerVisitor {
-    return new ConsoleView();
+  protected createViewFactory(): ViewFactory {
+    return new ConsoleViewFactory();
   }
 
   static start(): void {
