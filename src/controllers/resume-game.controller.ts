@@ -13,7 +13,7 @@ export class ResumeController extends Controller {
     this.logic.next();
   }
   resetGame(): void {
-    this.game.reset();
+    this.session.reset();
     this.logic.currentState = "INITIAL";
   }
 }

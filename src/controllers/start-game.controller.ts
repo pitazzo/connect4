@@ -48,11 +48,11 @@ export class StartGameController extends Controller {
 
     const players = [...humans, ...machines];
 
-    this.game.setPlayers([players[0], players[1]]);
+    this.session.setPlayers([players[0], players[1]]);
   }
 
   private getPlayersSummary(): PlayerSummary {
-    return this.game
+    return this.session
       .getPlayers()
       .map((player) => ({ type: player.getType(), color: player.color }));
   }

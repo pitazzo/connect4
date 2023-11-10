@@ -6,9 +6,9 @@ import { HumanPlayerController } from "./players/human-player.controller.js";
 
 export class PlayController extends Controller implements PlayerVisitor {
   async control(): Promise<void> {
-    this.game.advanceTurn();
-    await this.game.getCurrentPlayer().accept(this);
-    this.viewFactory.createBoardView().draw(this.game.board);
+    await this.viewFactory.createFlowMenu(this.session).execute();
+    await this.session.getCurrentPlayer().accept(this);
+    this.viewFactory.createBoardView().draw(this.session.getBoard());
     if (this.getWinner() !== undefined) {
       this.viewFactory.createMessagesView().announceWinner(this.getWinner());
       this.logic.next();
@@ -18,25 +18,25 @@ export class PlayController extends Controller implements PlayerVisitor {
   async visitMachinePlayer(): Promise<void> {
     await new MachinePlayerController(
       this.logic,
-      this.game,
+      this.session,
       this.viewFactory
     ).control();
   }
   async visitHumanPlayer(): Promise<void> {
     await new HumanPlayerController(
       this.logic,
-      this.game,
+      this.session,
       this.viewFactory
     ).control();
   }
 
   private getWinner(): Player | undefined | null {
-    const currentPlayer = this.game.getCurrentPlayer();
+    const currentPlayer = this.session.getCurrentPlayer();
     if (!currentPlayer.hasTokens()) {
       return null;
     }
 
-    if (this.game.board.hasConnect4(currentPlayer.color)) {
+    if (this.session.getBoard().hasConnect4(currentPlayer.color)) {
       return currentPlayer;
     }
 

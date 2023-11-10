@@ -4,10 +4,12 @@ import { Controller } from "../controller.js";
 export abstract class PlayerController extends Controller {
   async control(): Promise<void> {
     const columnId = await this.selectColumn();
-    this.game.getCurrentPlayer().placeTokenAt(columnId, this.game.board);
+    this.session
+      .getCurrentPlayer()
+      .placeTokenAt(columnId, this.session.getBoard());
     this.viewFactory
       .createMessagesView()
-      .tokenPlaced(this.game.getCurrentPlayer(), columnId);
+      .tokenPlaced(this.session.getCurrentPlayer(), columnId);
   }
 
   protected abstract selectColumn(): Promise<ColumnId>;

@@ -6,8 +6,8 @@ export class HumanPlayerController extends PlayerController {
     return this.viewFactory
       .createQuestionsView()
       .askForColumnInList(
-        this.game.board.getAvailableColumns(),
-        this.game.getCurrentPlayer()
+        this.session.getBoard().getAvailableColumns(),
+        this.session.getCurrentPlayer()
       );
   }
 }

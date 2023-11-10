@@ -1,11 +1,11 @@
-import { Game } from "../models/game.js";
+import { Session } from "../models/session.js";
 import { ViewFactory } from "../views/view.factory.js";
 import { Logic } from "./logic.js";
 
 export abstract class Controller {
   constructor(
     protected readonly logic: Logic,
-    protected readonly game: Game,
+    protected readonly session: Session,
     protected readonly viewFactory: ViewFactory
   ) {}
 
